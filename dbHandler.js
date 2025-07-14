@@ -60,7 +60,7 @@ exports.user = dbHandler.define('felhasznalok',{
     }
 })
 
-exports.animal = dbHandler.define('allatok',{
+exports.animals = dbHandler.define('allatok',{
     'id':{
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
@@ -80,7 +80,7 @@ exports.animal = dbHandler.define('allatok',{
         allowNull: false
     },
     'dateOfBirth':{
-        type: DataTypes.DATETIME,
+        type: DataTypes.DATE,
         allowNull: false
     },
     'weight':{
@@ -153,7 +153,7 @@ exports.medicalRecord = dbHandler.define('orvosifeljegyzesek',{
         allowNull: false
     },
     'date':{  //dátum
-        type: DataTypes.DATETIME,
+        type: DataTypes.DATE,
         allowNull: false
     },
     'medicalDescription':{  //orvosi leírás

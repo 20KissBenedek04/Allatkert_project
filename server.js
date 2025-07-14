@@ -11,6 +11,11 @@ const expireTime = process.env.EXPIRESIN
 
 dbHandler.zoo.sync({ alter: true })
 dbHandler.user.sync({ alter: true })
+dbHandler.animals.sync({alter: true})
+dbHandler.species.sync({alter: true})
+dbHandler.animalType.sync({alter: true})
+dbHandler.enclosure.sync({alter: true})
+dbHandler.medicalRecord.sync({alter: true})
 
 server.use(express.json())
 server.use(cors())
@@ -92,6 +97,7 @@ server.post('/user', async (req, res) => {
     })
     res.status(201).json({ 'message': 'Sikeres létrehozás' }).end()
 })
+
 
 
 
