@@ -95,6 +95,4 @@ server.post('/user', async (req, res) => {
 
 
 
-
-
 server.listen(PORT, () => console.log(`A szerver fut a ${PORT} porton`))
