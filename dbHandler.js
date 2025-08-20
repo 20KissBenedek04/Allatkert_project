@@ -4,12 +4,8 @@ const dbHandler = new Sequelize('data','root','',{dialect: 'mysql', host: '127.1
 exports.zoo = dbHandler.define('allatkert',{
     'id':{  //azonosító
         type: DataTypes.INTEGER,
-        autoIncrement: true,
         primaryKey: true,
-        allowNull: false
-    },
-    'user':{  //felhasználó
-        type: DataTypes.STRING,
+        autoIncrement: true,
         allowNull: false
     },
     'animal':{  //állat
@@ -18,16 +14,15 @@ exports.zoo = dbHandler.define('allatkert',{
     },
     'species':{  //faj
         type: DataTypes.STRING,
-        allowNull: false,
-        //defaultValue: "link"
+        allowNull: false
     },
     'animalType':{  //állattípus
         type: DataTypes.STRING,
-        allowNull: true
+        allowNull: false
     },
     'enclosure':{  //kifutó; bekerített, elkerített terület
         type: DataTypes.STRING,
-        allowNull:true
+        allowNull: false
     },
     'medicalRecord':{  //orvosi feljegyzés
         type: DataTypes.STRING,
@@ -37,13 +32,9 @@ exports.zoo = dbHandler.define('allatkert',{
 
 exports.user = dbHandler.define('felhasznalok',{
     'id':{
-        type: DataTypes.UUID,
-        defaultValue: DataTypes.UUIDV4,
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
         primaryKey: true,
-        allowNull: false
-    },
-    'userName':{
-        type: DataTypes.STRING,
         allowNull: false
     },
     'userEmail':{
@@ -62,9 +53,9 @@ exports.user = dbHandler.define('felhasznalok',{
 
 exports.animals = dbHandler.define('allatok',{
     'id':{
-        type: DataTypes.UUID,
-        defaultValue: DataTypes.UUIDV4,
+        type: DataTypes.INTEGER,
         primaryKey: true,
+        autoIncrement: true,
         allowNull: false
     },
     'animalName':{
@@ -104,9 +95,9 @@ exports.animals = dbHandler.define('allatok',{
 
 exports.species = dbHandler.define('faj',{
     'id':{
-        type: DataTypes.UUID,
-        defaultValue: DataTypes.UUIDV4,
+        type: DataTypes.INTEGER,
         primaryKey: true,
+        autoIncrement: true,
         allowNull: false
     },
     'speciesName':{
@@ -117,9 +108,9 @@ exports.species = dbHandler.define('faj',{
 
 exports.animalType = dbHandler.define('allattipus',{
     'id':{
-        type: DataTypes.UUID,
-        defaultValue: DataTypes.UUIDV4,
+        type: DataTypes.INTEGER,
         primaryKey: true,
+        autoIncrement:true,
         allowNull: false
     },
     'animalTypeName':{
@@ -130,8 +121,8 @@ exports.animalType = dbHandler.define('allattipus',{
 
 exports.enclosure = dbHandler.define('kifutok',{
     'id':{
-        type: DataTypes.UUID,
-        defaultValue: DataTypes.UUIDV4,
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
         primaryKey: true,
         allowNull: false
     },
@@ -147,8 +138,8 @@ exports.enclosure = dbHandler.define('kifutok',{
 
 exports.medicalRecord = dbHandler.define('orvosifeljegyzesek',{
     'id':{  //azonosító
-        type: DataTypes.UUID,
-        defaultValue: DataTypes.UUIDV4,
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
         primaryKey: true,
         allowNull: false
     },
@@ -166,14 +157,6 @@ exports.medicalRecord = dbHandler.define('orvosifeljegyzesek',{
     },
     'vetId':{  //állatorvos azonosító
         type: DataTypes.INTEGER,
-        allowNull: false
-    },
-    'modifiable':{  //módosítható
-        type: DataTypes.BOOLEAN,
-        allowNull: false
-    },
-    'cannotBeDeleted':{  //nem törölhető
-        type: DataTypes.BOOLEAN,
         allowNull: false
     }
 })

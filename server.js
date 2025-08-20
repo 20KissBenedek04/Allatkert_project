@@ -2,6 +2,7 @@ const express = require('express')
 const dbHandler = require('./dbHandler')
 const JWT = require('jsonwebtoken')
 const cors = require('cors')
+const { where } = require('sequelize')
 require('dotenv').config()
 
 const server = express()
@@ -35,19 +36,15 @@ function Auth(){
     }
 }
 
-server.get('/user', async (req, res) => {
-    res.status(200).json(await dbHandler.user.findAll()).end()
+server.get('/animals', async (req, res) => {
+    res.status(200).json(await dbHandler.animals.findAll()).end()
 })
 
-server.get('/firstUser', async (req, res) => {
-    res.status(200).json(await dbHandler.user.findOne()).end()
-})
 
-server.post('/login', async (req,res) => {
-    console.log(req.body)
+server.post('/login', Auth(), async (req,res) => {
     const oneUser = await dbHandler.user.findOne({
         where:{
-            userName: req.body.loginUser,
+            userEmail: req.body.loginEmail,
             userPassword: req.body.loginPass
         }
     })
@@ -55,15 +52,14 @@ server.post('/login', async (req,res) => {
         res.status(401).json({'message':'Hibás felhasználó vagy jelszó'})
         return
     }
-    const token = await JWT.sign({userName: req.body.loginUser}, SECRETKEY, {expiresIn:'1h'})
+    const token = await JWT.sign({userName: req.body.loginUser},SECRETKEY,{expiresIn:'1h'})
     res.json({'message':'Sikeres bejelentkezés', 'token': token}).end()
 })
 
 server.post('/registration', async (req,res) => {
-    console.log(req.body)
     const oneUser = await dbHandler.user.findOne({
         where:{
-            userName: req.body.regUser
+            userName: req.body.regEmail
         }
     })
     if(oneUser){
@@ -71,31 +67,60 @@ server.post('/registration', async (req,res) => {
         return
     }
     await dbHandler.user.create({
-        userName: req.body.regUser,
-        userPassword: req.body.regPassword
+        userName: req.body.regEmail,
+        userPassword: req.body.regPassword,
+        userRole: req.body.regRole
     })
     res.status(201).json({'message':'Sikeres regisztráció'}).end()
 })
 
-server.post('/user', async (req, res) => {
-    console.log('Ez itt a body:')
-    console.log(req.body)
-    const oneUser = await dbHandler.user.findOne({
-        where: {
-            userName: req.body.newUserName
+server.post('/animals', Auth(), async (req, res) => {
+    const animal = await dbHandler.findOne({
+        where:{
+            animalName: req.body.newAnimalName
         }
     })
-    if(!oneUser){
-        res.status(409).json({'message':'Sikertelen létrehozás, már létező felhasználónév!'}).end()
+    if(animal){
+        res.status(409).json({'message':'Már van ilyen állat létrehozva'})
         return
     }
-    await dbHandler.user.create({
-        userName: req.body.newUserName,
-        userEmail: req.body.newUserEmail,
-        userPassword: req.body.newUserPassword,
-        role: req.body.newRole
+    await dbHandler.animals.create({
+        animalName: req.body.newAnimalName,
+        typeId: req.body.newTypeId,
+        speciesId: req.body.newSpeciesId,
+        dateofbirth: req.body.newDateofbirth,
+        weight: req.body.newWeight,
+        enclousre: req.body.newEnclousre,
+        isActive: req.body.newIsActive
     })
-    res.status(201).json({ 'message': 'Sikeres létrehozás' }).end()
+})
+
+server.get('/animals/:id/records', Auth(), async(req,res) => {
+    res.status(200).json(await dbHandler.animals.findAll()).end()
+})
+
+server.post('/animals/:id/records', Auth(), async(req,res) => {
+    const record = await dbHandler.findOne({
+        where:{
+            
+        }
+    })
+})
+
+server.put('/animals/:id', Auth(), async(req,res) => {
+    const oneAnimals = await dbHandler.animals.findOne({
+        where:{
+            ID: req.params.id
+        }
+    })
+    if(!oneAnimals){
+        res.status(404).json({'message':'Nincs ilyen ID-val rendelkező állat'})
+    }
+    await dbHandler.animals.update({
+        animalName: req.body.newAnimalName,
+        speciesId: req.body.newSpeciesId,
+        isActive: req.body.newisActive
+    })
 })
 
 
